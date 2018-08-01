@@ -1,2 +1,2 @@
-# nagios-nrpe-server-ubuntu-priviledged-ports
-Nagios NRPE server for Ubuntu Xenial to run on priviledged ports
+# nagios-nrpe-server-ubuntu-privileged-ports
+Nagios NRPE server for Ubuntu Xenial to run on privileged ports
