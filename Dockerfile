@@ -1,29 +1,36 @@
-FROM       ubuntu:16.04
+FROM    ubuntu:16.04
 
-ENV        NRPE_VERSION '2.15'
+LABEL   maintainer='Sander Bel <sander@intelliops.be>'
 
-RUN        echo 'deb-src "http://archive.ubuntu.com/ubuntu/" xenial-updates universe multiverse main restricted' > /etc/apt/sources.list.d/xenial-updates-source.list
+ENV     DEBFULLNAME 'Sander Bel'
+ENV     DEBEMAIL 'sander@intelliops.be'
+ENV     NRPE_VERSION '2.15'
 
-RUN        mkdir /build /build-artifacts
+RUN     echo 'deb-src "http://archive.ubuntu.com/ubuntu/" xenial-updates universe multiverse main restricted' > /etc/apt/sources.list.d/xenial-updates-source.list
 
-WORKDIR    /build
+RUN     mkdir /build /build-artifacts
 
-RUN        apt-get update --fix-missing && \
-           apt-get install -q -y --no-install-recommends dpkg-dev devscripts equivs && \
-           apt-get source nagios-nrpe-server && \
-           mv nagios-nrpe-${NRPE_VERSION} source && \
-           rm -rf /var/lib/apt/lists/*
+WORKDIR /build
 
-WORKDIR    /build/source
+RUN     apt-get update --fix-missing && \
+        apt-get install -q -y --no-install-recommends dpkg-dev devscripts equivs && \
+        apt-get source nagios-nrpe-server && \
+        mv nagios-nrpe-${NRPE_VERSION} source && \
+        rm -rf /var/lib/apt/lists/*
 
-RUN        apt-get update --fix-missing && \
-           mk-build-deps -i -t 'apt-get -o Debug::pkgProblemResolver=yes -q -y --no-install-recommends' && \
-           rm -rf /var/lib/apt/lists/*
+WORKDIR /build/source
 
-COPY       00list source/debian/patches/00list
+RUN     apt-get update --fix-missing && \
+        mk-build-deps -i -t 'apt-get -o Debug::pkgProblemResolver=yes -q -y --no-install-recommends' && \
+        rm -rf /var/lib/apt/lists/*
 
-COPY       11_privileged_ports.dpatch source/debian/patches/
+COPY    99_privileged_ports.dpatch debian/patches/
 
-VOLUME     ["/build-artifacts"]
+RUN     echo '99_privileged_ports.dpatch' >> debian/patches/00list
 
-ENTRYPOINT ["/bin/bash", "-c", "debuild -uc -us && mv ../nagios-nrpe* /build-artifacts"]
+RUN     dch -i 'Added support for privileged ports through authbind.' && \
+        dch -r xenial
+
+VOLUME  ["/build-artifacts"]
+
+CMD     ["/bin/bash", "-c", "debuild -uc -us && mv ../nagios-nrpe* /build-artifacts"]

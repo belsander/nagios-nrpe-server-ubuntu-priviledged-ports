@@ -1,8 +1,0 @@
-02_nrpe.cfg_local-include.dpatch
-03_support_nrpe.d.dpatch
-05_pid_privileges.dpatch
-06_pid_directory.dpatch
-07_warn_ssloption.dpatch
-09_noremove_pid.dpatch
-10_remote_execution_exploit_fix.dpatch
-11_privileged_ports.dpatch

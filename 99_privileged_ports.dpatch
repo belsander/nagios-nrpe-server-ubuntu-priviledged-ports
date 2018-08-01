@@ -1,10 +1,22 @@
 #! /bin/sh /usr/share/dpatch/dpatch-run
-## 11_privileged_ports.dpatch by Sander Bel <sander@intelliops.be>
+## 99_privileged_ports.dpatch by Sander Bel <sander@intelliops.be>
 ##
 ## All lines beginning with `## DP:' are a description of the patch.
 ## DP: No description.
 
 @DPATCH@
+diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' source~/debian/control source/debian/control
+--- source~/debian/control	2018-08-01 11:56:14.000000000 +0000
++++ source/debian/control	2018-08-01 12:17:23.360034431 +0000
+@@ -9,7 +9,7 @@
+ 
+ Package: nagios-nrpe-server
+ Architecture: any
+-Depends: ${shlibs:Depends}, ${misc:Depends}, lsb-base (>= 3.0-3)
++Depends: ${shlibs:Depends}, ${misc:Depends}, lsb-base (>= 3.0-3), authbind (>= 2.1.1+nmu1)
+ Pre-Depends: adduser
+ Conflicts: nagios-nrpe-doc
+ Recommends: nagios-plugins-basic | nagios-plugins
 diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' nagios-nrpe-2.15~/README nagios-nrpe-2.15/README
 --- nagios-nrpe-2.15~/README	2018-08-01 09:23:35.000000000 +0200
 +++ nagios-nrpe-2.15/README	2018-08-01 09:53:29.000000000 +0200
