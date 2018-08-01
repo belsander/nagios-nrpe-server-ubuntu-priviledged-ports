@@ -5,4 +5,4 @@
 07_warn_ssloption.dpatch
 09_noremove_pid.dpatch
 10_remote_execution_exploit_fix.dpatch
-11_priviledged_ports.dpatch
+11_privileged_ports.dpatch
