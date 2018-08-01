@@ -1,7 +1,7 @@
 # nagios-nrpe-server-ubuntu-privileged-ports
 Nagios NRPE server for Ubuntu Xenial to run on privileged ports
 
-If you are having the same corporate firewall issues, then default NRPE port 5667 cannot be used. The only ports that are however available are privileged ports in that case ( =< 1024). With this patch, nagios-nrpe-server can run on privileged ports through authbind. Documentation can be found back in /etc/nagios/nrpe.cfg.
+If you are having the same corporate firewall issues, then default NRPE port 5666 cannot be used. The only ports that are however available are privileged ports in that case ( =< 1024). With this patch, nagios-nrpe-server can run on privileged ports through authbind. Documentation can be found back in /etc/nagios/nrpe.cfg.
 
 Or in short:
 ```
