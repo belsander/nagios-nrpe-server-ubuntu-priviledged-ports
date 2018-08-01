@@ -18,7 +18,7 @@ server_port=<PORT>
 ```
 git clone https://github.com/belsander/nagios-nrpe-server-ubuntu-privileged-ports nagios-nrpe-server
 cd nagios-nrpe-server
-docker build . -tag nagios-nrpe-server-builder
+docker build --tag nagios-nrpe-server-builder .
 mkdir /tmp/nagios-nrpe-server-build
 docker run -v /tmp/nagios-nrpe-server-build:/build-artifacts nagios-nrpe-server-builder
 ls -alh /tmp/nagios-nrpe-server-build
