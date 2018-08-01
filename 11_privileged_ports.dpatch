@@ -37,10 +37,10 @@ diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' 
 +++ nagios-nrpe-2.15/sample-config/nrpe.cfg.in	2018-08-01 09:53:29.000000000 +0200
 @@ -31,6 +31,10 @@
  # Port number we should wait for connections on.
- # NOTE: This must be a non-priviledged port (i.e. > 1024).
+ # NOTE: This must be a non-privileged port (i.e. > 1024).
  # NOTE: This option is ignored if NRPE is running under either inetd or xinetd
-+# NOTE: By default non-priviledged ports are required (i.e. > 1024), but if a
-+#       priviledged port is needed, then also the authbind configuration has
++# NOTE: By default non-privileged ports are required (i.e. > 1024), but if a
++#       privileged port is needed, then also the authbind configuration has
 +#       to be modified.
 +#       In short: touch /etc/authbind/byport/<PORT> && chmod 0755 /etc/authbind/byport/<PORT>
  
