@@ -1,0 +1,67 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 11_privileged_ports.dpatch by Sander Bel <sander@intelliops.be>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: No description.
+
+@DPATCH@
+diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' nagios-nrpe-2.15~/README nagios-nrpe-2.15/README
+--- nagios-nrpe-2.15~/README	2018-08-01 09:23:35.000000000 +0200
++++ nagios-nrpe-2.15/README	2018-08-01 09:53:29.000000000 +0200
+@@ -85,6 +85,11 @@
+ Sample config files for the NRPE daemon are located in the
+ sample-config/ subdirectory.
+ 
++1) modify /etc/nagios/nrpe.cfg to set server_port
++2) add empty file to /etc/authbind/byport/ with 0755 permissions
++example with port 443:
++1) server_port=443
++2) touch /etc/authbind/byport/443 && chmod 0755 /etc/authbind/byport/443
+ 
+ 
+ Running Under INETD or XINETD
+diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' nagios-nrpe-2.15~/debian/nagios-nrpe-server.init nagios-nrpe-2.15/debian/nagios-nrpe-server.init
+--- nagios-nrpe-2.15~/debian/nagios-nrpe-server.init	2018-08-01 09:23:35.000000000 +0200
++++ nagios-nrpe-2.15/debian/nagios-nrpe-server.init	2018-08-01 09:53:29.000000000 +0200
+@@ -55,7 +55,7 @@
+ 		exit 1
+ 	fi
+ 	log_daemon_msg "Starting $DESC" "$NAME"
+-	start_daemon -p $PIDDIR/nrpe.pid $NICENESS $DAEMON  -c $CONFIG -d $DAEMON_OPTS
++	start_daemon -p $PIDDIR/nrpe.pid $NICENESS /usr/bin/authbind $DAEMON  -c $CONFIG -d $DAEMON_OPTS
+ 	log_end_msg $?
+ 	;;
+   stop)
+diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' nagios-nrpe-2.15~/sample-config/nrpe.cfg.in nagios-nrpe-2.15/sample-config/nrpe.cfg.in
+--- nagios-nrpe-2.15~/sample-config/nrpe.cfg.in	2018-08-01 09:53:29.205629970 +0200
++++ nagios-nrpe-2.15/sample-config/nrpe.cfg.in	2018-08-01 09:53:29.000000000 +0200
+@@ -31,6 +31,10 @@
+ # Port number we should wait for connections on.
+ # NOTE: This must be a non-priviledged port (i.e. > 1024).
+ # NOTE: This option is ignored if NRPE is running under either inetd or xinetd
++# NOTE: By default non-priviledged ports are required (i.e. > 1024), but if a
++#       priviledged port is needed, then also the authbind configuration has
++#       to be modified.
++#       In short: touch /etc/authbind/byport/<PORT> && chmod 0755 /etc/authbind/byport/<PORT>
+ 
+ server_port=@nrpe_port@
+ 
+diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' nagios-nrpe-2.15~/src/nrpe.c nagios-nrpe-2.15/src/nrpe.c
+--- nagios-nrpe-2.15~/src/nrpe.c	2018-08-01 09:53:29.193629783 +0200
++++ nagios-nrpe-2.15/src/nrpe.c	2018-08-01 09:53:29.000000000 +0200
+@@ -528,13 +528,9 @@
+ 				syslog(LOG_ERR,"Continuing with errors...");
+ 		        }
+ 
+-		else if(!strcmp(varname,"server_port")){
++		else if(!strcmp(varname,"server_port"))
+ 			server_port=atoi(varvalue);
+-			if(server_port<1024){
+-				syslog(LOG_ERR,"Invalid port number specified in config file '%s' - Line %d\n",filename,line);
+-				return ERROR;
+-			        }
+-		        }
++
+ 		else if(!strcmp(varname,"command_prefix"))
+ 			command_prefix=strdup(varvalue);
+ 
