@@ -13,7 +13,7 @@ diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' 
  Package: nagios-nrpe-server
  Architecture: any
 -Depends: ${shlibs:Depends}, ${misc:Depends}, lsb-base (>= 3.0-3)
-+Depends: ${shlibs:Depends}, ${misc:Depends}, lsb-base (>= 3.0-3), authbind (>= 2.1.1+nmu1)
++Depends: ${shlibs:Depends}, ${misc:Depends}, lsb-base (>= 3.0-3), authbind (>= 2.1.1)
  Pre-Depends: adduser
  Conflicts: nagios-nrpe-doc
  Recommends: nagios-plugins-basic | nagios-plugins

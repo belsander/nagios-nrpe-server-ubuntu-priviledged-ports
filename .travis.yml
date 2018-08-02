@@ -1,0 +1,15 @@
+sudo: required
+
+language: bash
+
+services:
+  - docker
+
+install:
+  - docker build -t intelliops/nagios-nrpe-server-builder .
+  - docker run -v /tmp/nagios-nrpe-server-build:/build-artifacts intelliops/nagios-nrpe-server-builder
+
+script:
+  - ls -alh /tmp/nagios-nrpe-server-build
+  - dpkg -I /tmp/nagios-nrpe-server-build/nagios-nrpe-server_*.deb | grep authbind
+  - dpkg-deb --info /tmp/nagios-nrpe-server-build/nagios-nrpe-server_*.deb
