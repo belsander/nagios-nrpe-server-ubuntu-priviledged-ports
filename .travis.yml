@@ -12,3 +12,4 @@ install:
 script:
   - ls -alh /tmp/nagios-nrpe-server-build
   - dpkg -I /tmp/nagios-nrpe-server-build/nagios-nrpe-server_*.deb | grep authbind
+  - dpkg-deb --info /tmp/nagios-nrpe-server-build/nagios-nrpe-server_*.deb
